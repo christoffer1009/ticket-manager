@@ -138,42 +138,29 @@ class TicketController extends Controller
         $request->validate([
             'title' => 'required|string',
             'description' => 'required|string',
-            // 'assignee_id' => 'required|exists:users,id',
+            'assignee_id' => 'nullable|exists:users,id',
             'priority_id' => 'required|exists:priorities,id',
             'status_id' => 'required|exists:statuses,id',
-            'closed_at' => 'nullable|date',
         ]);
+
+        if ($ticket->status_id !== 3 && $request->status_id == 3) {
+            $closedAt = Carbon::now();
+        }
+
+        if ($ticket->status_id === 3 && $request->status_id !== 3) {
+            $closedAt = null;
+        }
 
         $ticket->update([
             'title' => $request->title,
             'description' => $request->description,
-            'assignee_id' => $request->assignee_id,
+            'assignee_id' => $request->assignee_id ?? Auth::user()->id,
             'priority_id' => $request->priority_id,
             'status_id' => $request->status_id,
-            'closed_at' => $request->closed_at,
+            'closed_at' => $closedAt,
         ]);
 
         return redirect()->route('tickets.index')->with('success', 'Ticket updated successfully.');
-    }
-
-    public function updateStatus(Request $request, string $id)
-    {
-        $ticket = Ticket::findOrFail($id);
-        $this->authorize('updateStatus', $ticket);
-
-        $request->validate([
-            'status_id' => 'required|exists:statuses,id',
-        ]);
-
-        $ticket->status_id = $request->status_id;
-
-        if ($request->status_id == 3) {
-            $ticket->closed_at = Carbon::now();
-        }
-
-        $ticket->save();
-
-        return redirect()->route('tickets.show', $ticket->id)->with('success', 'Ticket status updated successfully.');
     }
 
     /**

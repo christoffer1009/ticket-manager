@@ -1,5 +1,10 @@
 @extends('layouts.app')
 
+@php
+    $isAdmin = auth()->user()->role->name === 'admin';
+    $isTechnician = auth()->user()->role->name === 'technician';
+@endphp
+
 @section('content')
     <div class="container p-4 mx-auto">
         <h1 class="mb-4 text-2xl font-bold">Edit Ticket</h1>
@@ -65,23 +70,23 @@
                         @endforeach
                     </select>
                 </div>
-
-                <div class="mb-4">
-                    <label class="block mb-2 text-sm font-bold text-gray-700" for="assignee_id">
-                        Assignee
-                    </label>
-                    <select name="assignee_id"
-                        class="block w-full px-2 py-1 pr-8 leading-tight bg-white border border-gray-400 rounded shadow appearance-none sm:w-1/4 md:w-1/4 hover:border-gray-500 focus:outline-none focus:shadow-outline">
-                        <option value="">None</option>
-                        @foreach ($users as $user)
-                            <option value="{{ $user->id }}"
-                                {{ $ticket->assignee_id === $user->id ? 'selected' : '' }}>
-                                {{ $user->name }}
-                            </option>
-                        @endforeach
-                    </select>
-                </div>
-
+                @if ($isAdmin)
+                    <div class="mb-4">
+                        <label class="block mb-2 text-sm font-bold text-gray-700" for="assignee_id">
+                            Assignee
+                        </label>
+                        <select name="assignee_id"
+                            class="block w-full px-2 py-1 pr-8 leading-tight bg-white border border-gray-400 rounded shadow appearance-none sm:w-1/4 md:w-1/4 hover:border-gray-500 focus:outline-none focus:shadow-outline">
+                            <option value="">None</option>
+                            @foreach ($users as $user)
+                                <option value="{{ $user->id }}"
+                                    {{ $ticket->assignee_id === $user->id ? 'selected' : '' }}>
+                                    {{ $user->name }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+                @endif
 
                 <div class="flex items-center justify-between">
                     <button type="submit"

@@ -24,7 +24,6 @@ Route::middleware('auth')->group(function () {
     Route::delete('/tickets/{id}', [TicketController::class, 'destroy'])->name('tickets.destroy');
     Route::post('/tickets/{id}/assign-to-me', [TicketController::class, 'assignToMe'])->name('tickets.assignToMe');
     Route::post('/tickets/{id}/assign-to-other', [TicketController::class, 'assignToOther'])->name('tickets.assignToOther');
-    Route::put('/tickets/{id}/update-status', [TicketController::class, 'updateStatus'])->name('tickets.updateStatus');
 
     Route::post('/tickets/{ticketId}/comment', [CommentController::class, 'store'])->name('comments.store');
     Route::get('/tickets/{ticketId}/comment/{commentId}/edit', [CommentController::class, 'edit'])->name('comments.edit');

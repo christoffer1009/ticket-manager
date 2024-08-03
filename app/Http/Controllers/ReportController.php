@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Priority;
 use App\Models\Status;
 use App\Models\Ticket;
+use App\Models\User;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 use Illuminate\Http\Request;
@@ -14,7 +15,7 @@ class ReportController extends Controller
 {
     public function index(Request $request)
     {
-        if (Auth::user()->role !== 'admin' || Auth::user()->role !== 'technician') {
+        if (Auth::user()->role->name !== 'admin') {
             return redirect()->route('tickets.index')->with('error', 'You do not have permission to access this page.');
         }
 
@@ -84,18 +85,20 @@ class ReportController extends Controller
 
         // Get a list of the technicians who have answered the most tickets
         $topTechnicians = Ticket::whereNotNull('closed_at')
-            ->select('assignee_id')
-            ->groupBy('assignee_id')
-            ->orderByRaw('count(*) desc')
-            ->withCount('assignee')
-            ->take(5)
+            ->with('assignee')
             ->get()
-            ->map(function ($ticket) {
+            ->groupBy('assignee_id')
+            ->sortByDesc(function ($tickets) {
+                return $tickets->count();
+            })
+            ->take(5)
+            ->map(function ($tickets, $assigneeId) {
                 return [
-                    'name' => $ticket->assignee->name,
-                    'total' => $ticket->assignee_count
+                    'name' => $tickets->first()->assignee->name,
+                    'total_closed' => $tickets->count()
                 ];
             });
+
 
         return view('reports', compact('ticketStatusData', 'ticketPriorityData', 'totalTickets', 'timeData', 'topTechnicians'));
     }

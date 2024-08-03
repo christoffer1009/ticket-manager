@@ -12,7 +12,7 @@
             @foreach ($topTechnicians as $technician)
                 <tr>
                     <td class="py-2">{{ $technician['name'] }}</td>
-                    <td class="py-2 text-center">{{ $technician['total'] }}</td>
+                    <td class="py-2 text-center">{{ $technician['total_closed'] }}</td>
                 </tr>
             @endforeach
         </tbody>

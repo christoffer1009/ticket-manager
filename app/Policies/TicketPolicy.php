@@ -36,7 +36,7 @@ class TicketPolicy
      */
     public function update(User $user, Ticket $ticket): bool
     {
-        return $user->role->name === 'admin';
+        return $user->role->name === 'admin' || $user->role->name === 'technician' && $ticket->assignee_id === $user->id;
     }
 
     /**
@@ -71,10 +71,5 @@ class TicketPolicy
     public function assignToOther(User $user, Ticket $ticket): bool
     {
         return $user->role->name === 'admin';
-    }
-
-    public function updateStatus(User $user, Ticket $ticket): bool
-    {
-        return $user->role->name === 'admin' || $ticket->assignee_id === $user->id;
     }
 }

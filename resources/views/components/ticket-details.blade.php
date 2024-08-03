@@ -46,17 +46,19 @@
                 Me</button>
         </form>
     @endif
-    @if ($isAdmin)
+    @if (($isTechnician && $isAssignedToUser) || $isAdmin)
         <div class="flex space-x-4">
             <a href="{{ route('tickets.edit', $ticket->id) }}"
                 class="px-4 py-2 text-white bg-yellow-500 rounded hover:bg-yellow-600">Edit</a>
-            <form action="{{ route('tickets.destroy', $ticket->id) }}" method="POST" class="inline-block">
-                @csrf
-                @method('DELETE')
-                <button type="submit" class="px-4 py-2 text-white bg-red-500 rounded hover:bg-red-600">Delete</button>
-            </form>
-        </div>
     @endif
+    @if ($isAdmin)
+        <form action="{{ route('tickets.destroy', $ticket->id) }}" method="POST" class="inline-block">
+            @csrf
+            @method('DELETE')
+            <button type="submit" class="px-4 py-2 text-white bg-red-500 rounded hover:bg-red-600">Delete</button>
+        </form>
+</div>
+@endif
 
 
 </div>
