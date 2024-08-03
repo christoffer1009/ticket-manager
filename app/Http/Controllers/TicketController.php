@@ -122,7 +122,8 @@ class TicketController extends Controller
         $this->authorize('update', $ticket);
         $statuses = Status::all();
         $priorities = Priority::all();
-        return view('tickets.edit', compact('ticket', 'statuses', 'priorities'));
+        $users = User::where('role_id', 2)->orWhere('role_id', 1)->get();
+        return view('tickets.edit', compact('ticket', 'statuses', 'priorities', 'users'));
     }
 
 
@@ -146,7 +147,7 @@ class TicketController extends Controller
         $ticket->update([
             'title' => $request->title,
             'description' => $request->description,
-            // 'assignee_id' => $request->assignee_id,
+            'assignee_id' => $request->assignee_id,
             'priority_id' => $request->priority_id,
             'status_id' => $request->status_id,
             'closed_at' => $request->closed_at,
@@ -172,7 +173,7 @@ class TicketController extends Controller
 
         $ticket->save();
 
-        return redirect()->route('tickets.show', $ticket->id)->with('success', 'Ticket status updated successfully!');
+        return redirect()->route('tickets.show', $ticket->id)->with('success', 'Ticket status updated successfully.');
     }
 
     /**

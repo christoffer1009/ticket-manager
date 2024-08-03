@@ -15,6 +15,9 @@
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+        integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 
 <body class="font-sans antialiased">
@@ -30,11 +33,21 @@
             </header>
         @endisset
 
+
+        <!-- Toast Notifications -->
+        @if (session('success'))
+            <x-toast message="{{ session('success') }}" type="success" />
+        @elseif(session('error'))
+            <x-toast message="{{ session('error') }}" type="error" />
+        @endif
+
         <!-- Page Content -->
         <main>
             @yield('content')
         </main>
     </div>
+
+
 </body>
 
 </html>

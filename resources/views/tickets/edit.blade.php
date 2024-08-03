@@ -66,6 +66,23 @@
                     </select>
                 </div>
 
+                <div class="mb-4">
+                    <label class="block mb-2 text-sm font-bold text-gray-700" for="assignee_id">
+                        Assignee
+                    </label>
+                    <select name="assignee_id"
+                        class="block w-full px-2 py-1 pr-8 leading-tight bg-white border border-gray-400 rounded shadow appearance-none sm:w-1/4 md:w-1/4 hover:border-gray-500 focus:outline-none focus:shadow-outline">
+                        <option value="">None</option>
+                        @foreach ($users as $user)
+                            <option value="{{ $user->id }}"
+                                {{ $ticket->assignee_id === $user->id ? 'selected' : '' }}>
+                                {{ $user->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+
+
                 <div class="flex items-center justify-between">
                     <button type="submit"
                         class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">

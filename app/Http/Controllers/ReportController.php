@@ -8,11 +8,15 @@ use App\Models\Ticket;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ReportController extends Controller
 {
     public function index(Request $request)
     {
+        if (Auth::user()->role !== 'admin' || Auth::user()->role !== 'technician') {
+            return redirect()->route('tickets.index')->with('error', 'You do not have permission to access this page.');
+        }
 
 
         $statusCounts = Ticket::groupBy('status_id')
