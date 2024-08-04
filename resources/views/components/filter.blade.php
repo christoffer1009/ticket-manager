@@ -8,10 +8,11 @@
 
         <select name="status" id="status"
             class="w-full px-2 py-1 pr-8 mt-2 leading-tight bg-white border border-gray-400 rounded shadow appearance-none md:w-1/3 md:mt-0 md:ml-2 hover:border-gray-500 focus:outline-none focus:shadow-outline">
-            <option value="">All Statuses</option>
+            <option value="">All</option>
+            <option value="notClosed">Not Closed</option>
             @foreach ($statuses as $status)
                 <option value="{{ $status->id }}" {{ $selectedStatus == $status->id ? 'selected' : '' }}>
-                    {{ $status->name }}
+                    {{ ucwords($status->name) }}
                 </option>
             @endforeach
         </select>
@@ -21,7 +22,7 @@
             <option value="">All Priorities</option>
             @foreach ($priorities as $priority)
                 <option value="{{ $priority->id }}" {{ $selectedPriority == $priority->id ? 'selected' : '' }}>
-                    {{ $priority->name }}
+                    {{ ucwords($priority->name) }}
                 </option>
             @endforeach
         </select>

@@ -32,9 +32,16 @@ class TicketController extends Controller
                         ->orWhere('description', 'like', "%{$search}%");
                 });
             })
-                ->when($statusFilter, function ($query, $statusFilter) {
-                    return $query->where('status_id', $statusFilter);
-                })
+                ->when(
+                    $statusFilter,
+                    function ($query, $statusFilter) {
+                        if ($statusFilter === 'notClosed') {
+                            $query->whereIn('status_id', [1, 2]);
+                        } else {
+                            $query->where('status_id', $statusFilter);
+                        }
+                    }
+                )
                 ->when($priorityFilter, function ($query, $priorityFilter) {
                     return $query->where('priority_id', $priorityFilter);
                 });
